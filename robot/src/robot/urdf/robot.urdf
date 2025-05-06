@@ -1,0 +1,1531 @@
+<?xml version="1.0"?>
+<robot
+  name="robot">
+  <link name="base"/>
+  <link
+    name="base_button_link">
+    <inertial>
+      <origin
+        xyz="0.0116256098900701 -1.38777878078145E-17 0.0165977213888978"
+        rpy="0 0 0" />
+      <mass
+        value="0.562680175487904" />
+      <inertia
+        ixx="0.00223754727558901"
+        ixy="9.25664903637711E-19"
+        ixz="-2.43360367983887E-05"
+        iyy="0.00591627890419262"
+        iyz="-2.4953433776722E-19"
+        izz="0.00794821674099376" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_button_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.564705882352941 0.564705882352941 0.564705882352941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_button_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_joint" type="fixed">
+    <parent link="base"/>
+    <child link="base_button_link"/>
+  </joint>
+  <link
+    name="lion_1_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 -1.3878E-17 3.2526E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.2718E-22"
+        ixz="1.3993E-22"
+        iyy="4.7424E-06"
+        iyz="-1.5387E-24"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_1_joint"
+    type="fixed">
+    <origin
+      xyz="0.0735 -0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_1_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lion_2_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 0 8.6736E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.2717E-22"
+        ixz="6.5401E-23"
+        iyy="4.7424E-06"
+        iyz="-8.1115E-25"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_2_joint"
+    type="fixed">
+    <origin
+      xyz="0.0735 0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_2_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lion_3_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 -6.9389E-18 4.3368E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.0025E-22"
+        ixz="1.3986E-22"
+        iyy="4.7424E-06"
+        iyz="-1.9406E-24"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_3_joint"
+    type="fixed">
+    <origin
+      xyz="0.0025 -0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_3_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lion_4_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 0 7.5894E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.0024E-22"
+        ixz="6.5352E-23"
+        iyy="4.7424E-06"
+        iyz="-1.061E-24"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_4_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_4_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_4_joint"
+    type="fixed">
+    <origin
+      xyz="0.0025 0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_4_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lion_5_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 -6.9389E-18 3.2526E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.5307E-22"
+        ixz="1.3983E-22"
+        iyy="4.7424E-06"
+        iyz="-1.6329E-24"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_5_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_5_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_5_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0693 -0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_5_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lion_6_link">
+    <inertial>
+      <origin
+        xyz="-0.0023167 0 8.6736E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.013576" />
+      <inertia
+        ixx="4.6824E-07"
+        ixy="-1.5309E-22"
+        ixz="6.5351E-23"
+        iyy="4.7424E-06"
+        iyz="-9.9456E-25"
+        izz="4.7424E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_6_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/lion_6_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lion_6_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0693 0.009 0.012"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="lion_6_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="ir_front_center_link">
+    <inertial>
+      <origin
+        xyz="0.0037891 0.0027667 -0.0038028"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013165" />
+      <inertia
+        ixx="1.4702E-08"
+        ixy="8.2217E-19"
+        ixz="6.9028E-13"
+        iyy="6.1196E-08"
+        iyz="-1.8247E-18"
+        izz="7.3981E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_center_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_center_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ir_front_center_joint"
+    type="fixed">
+    <origin
+      xyz="0.13837 -0.003225 0.0397"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="ir_front_center_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="ir_front_left_link">
+    <inertial>
+      <origin
+        xyz="0.0015169 0.0044396 -0.0041028"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013165" />
+      <inertia
+        ixx="2.9998E-08"
+        ixy="-2.1845E-08"
+        ixz="5.6601E-13"
+        iyy="4.59E-08"
+        iyz="3.9626E-13"
+        izz="7.3981E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ir_front_left_joint"
+    type="fixed">
+    <origin
+      xyz="0.13254 0.057847 0.04"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="ir_front_left_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="ir_front_right_link">
+    <inertial>
+      <origin
+        xyz="0.0046907 9.3001E-05 -0.0038028"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013165" />
+      <inertia
+        ixx="2.9998E-08"
+        ixy="2.1845E-08"
+        ixz="5.6601E-13"
+        iyy="4.59E-08"
+        iyz="-3.9627E-13"
+        izz="7.3981E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ir_front_right_joint"
+    type="fixed">
+    <origin
+      xyz="0.12884 -0.06313 0.0397"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="ir_front_right_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="ir_back_center_link">
+    <inertial>
+      <origin
+        xyz="-0.0037891 -0.0027667 -0.0038028"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013165" />
+      <inertia
+        ixx="1.4702E-08"
+        ixy="8.2217E-19"
+        ixz="-6.9028E-13"
+        iyy="6.1196E-08"
+        iyz="1.8247E-18"
+        izz="7.3981E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_back_center_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/ir_back_center_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ir_back_center_joint"
+    type="fixed">
+    <origin
+      xyz="-0.13837 0.003225 0.0397"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="ir_back_center_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="holder_front_left_link">
+    <inertial>
+      <origin
+        xyz="0.0031198 0.01444 -0.016356"
+        rpy="0 0 0" />
+      <mass
+        value="0.023494" />
+      <inertia
+        ixx="5.831E-06"
+        ixy="4.9177E-07"
+        ixz="-5.9662E-07"
+        iyy="1.0684E-05"
+        iyz="1.6643E-07"
+        izz="1.3694E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="holder_front_left_joint"
+    type="fixed">
+    <origin
+      xyz="0.055367 0.039274 0.0285"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="holder_front_left_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="motor_front_left_link">
+    <inertial>
+      <origin
+        xyz="-0.020244 -0.00040467 -0.01125"
+        rpy="0 0 0" />
+      <mass
+        value="0.0083811" />
+      <inertia
+        ixx="6.3588E-07"
+        ixy="-7.6845E-09"
+        ixz="1.4236E-14"
+        iyy="1.1487E-06"
+        iyz="-9.5285E-16"
+        izz="1.049E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="motor_front_left_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0063174 0.021526 0"
+      rpy="0 0 0" />
+    <parent
+      link="holder_front_left_link" />
+    <child
+      link="motor_front_left_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="wheel_front_left_link">
+    <inertial>
+      <origin
+        xyz="-5.4973E-10 -3.9533E-10 0.0063758"
+        rpy="0 0 0" />
+      <mass
+        value="0.039063" />
+      <inertia
+        ixx="1.5316E-05"
+        ixy="1.5405E-13"
+        ixz="-3.6864E-13"
+        iyy="1.5316E-05"
+        iyz="3.1946E-13"
+        izz="2.8204E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.93725 0.13725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_front_left_joint"
+    type="continuous">
+    <origin
+      xyz="0.00795 0.0325 -0.01125"
+      rpy="1.5708 0 0" />
+    <parent
+      link="motor_front_left_link" />
+    <child
+      link="wheel_front_left_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="holder_front_right_link">
+    <inertial>
+      <origin
+        xyz="0.0031198 -0.01444 -0.016355"
+        rpy="0 0 0" />
+      <mass
+        value="0.023494" />
+      <inertia
+        ixx="5.831E-06"
+        ixy="-4.9179E-07"
+        ixz="-5.9663E-07"
+        iyy="1.0684E-05"
+        iyz="-1.6642E-07"
+        izz="1.3694E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="holder_front_right_joint"
+    type="fixed">
+    <origin
+      xyz="0.055367 -0.039274 0.0285"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="holder_front_right_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="motor_front_right_link">
+    <inertial>
+      <origin
+        xyz="-0.020244 0.00040467 -0.01125"
+        rpy="0 0 0" />
+      <mass
+        value="0.0083811" />
+      <inertia
+        ixx="6.3588E-07"
+        ixy="7.6845E-09"
+        ixz="-1.4236E-14"
+        iyy="1.1487E-06"
+        iyz="-9.5285E-16"
+        izz="1.049E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="motor_front_right_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0063174 -0.021526 0"
+      rpy="0 0 0" />
+    <parent
+      link="holder_front_right_link" />
+    <child
+      link="motor_front_right_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="wheel_front_right_link">
+    <inertial>
+      <origin
+        xyz="5.4973E-10 3.9533E-10 0.0063758"
+        rpy="0 0 0" />
+      <mass
+        value="0.039063" />
+      <inertia
+        ixx="1.5316E-05"
+        ixy="1.5405E-13"
+        ixz="3.6864E-13"
+        iyy="1.5316E-05"
+        iyz="-3.1946E-13"
+        izz="2.8204E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.93725 0.13725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_front_right_joint"
+    type="continuous">
+    <origin
+      xyz="0.00795 -0.0325 -0.01125"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="motor_front_right_link" />
+    <child
+      link="wheel_front_right_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="holder_back_right_link">
+    <inertial>
+      <origin
+        xyz="-0.0031198 -0.01444 -0.016356"
+        rpy="0 0 0" />
+      <mass
+        value="0.023494" />
+      <inertia
+        ixx="5.831E-06"
+        ixy="4.9177E-07"
+        ixz="5.9662E-07"
+        iyy="1.0684E-05"
+        iyz="-1.6643E-07"
+        izz="1.3694E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="holder_back_right_joint"
+    type="fixed">
+    <origin
+      xyz="-0.055367 -0.039274 0.0285"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="holder_back_right_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="motor_back_right_link">
+    <inertial>
+      <origin
+        xyz="0.020244 0.00040467 -0.01125"
+        rpy="0 0 0" />
+      <mass
+        value="0.0083811" />
+      <inertia
+        ixx="6.3588E-07"
+        ixy="-7.6845E-09"
+        ixz="-1.4236E-14"
+        iyy="1.1487E-06"
+        iyz="9.5285E-16"
+        izz="1.049E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="motor_back_right_joint"
+    type="fixed">
+    <origin
+      xyz="0.0063174 -0.021526 0"
+      rpy="0 0 0" />
+    <parent
+      link="holder_back_right_link" />
+    <child
+      link="motor_back_right_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="wheel_back_right_link">
+    <inertial>
+      <origin
+        xyz="5.4973E-10 3.9533E-10 0.0063758"
+        rpy="0 0 0" />
+      <mass
+        value="0.039063" />
+      <inertia
+        ixx="1.5316E-05"
+        ixy="1.5405E-13"
+        ixz="3.6864E-13"
+        iyy="1.5316E-05"
+        iyz="-3.1946E-13"
+        izz="2.8204E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.93725 0.13725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_back_right_joint"
+    type="continuous">
+    <origin
+      xyz="-0.00795 -0.0325 -0.01125"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="motor_back_right_link" />
+    <child
+      link="wheel_back_right_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="holder_back_left_link">
+    <inertial>
+      <origin
+        xyz="-0.0031198 0.01444 -0.016355"
+        rpy="0 0 0" />
+      <mass
+        value="0.023494" />
+      <inertia
+        ixx="5.831E-06"
+        ixy="-4.9179E-07"
+        ixz="5.9663E-07"
+        iyy="1.0684E-05"
+        iyz="1.6642E-07"
+        izz="1.3694E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/holder_back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="holder_back_left_joint"
+    type="fixed">
+    <origin
+      xyz="-0.055367 0.039274 0.0285"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="holder_back_left_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="motor_back_left_link">
+    <inertial>
+      <origin
+        xyz="0.020244 -0.00040467 -0.01125"
+        rpy="0 0 0" />
+      <mass
+        value="0.0083811" />
+      <inertia
+        ixx="6.3588E-07"
+        ixy="7.6845E-09"
+        ixz="1.4236E-14"
+        iyy="1.1487E-06"
+        iyz="9.5285E-16"
+        izz="1.049E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/motor_back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="motor_back_left_joint"
+    type="fixed">
+    <origin
+      xyz="0.0063174 0.021526 0"
+      rpy="0 0 0" />
+    <parent
+      link="holder_back_left_link" />
+    <child
+      link="motor_back_left_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="wheel_back_left_link">
+    <inertial>
+      <origin
+        xyz="-5.4973E-10 -3.9533E-10 0.0063758"
+        rpy="0 0 0" />
+      <mass
+        value="0.039063" />
+      <inertia
+        ixx="1.5316E-05"
+        ixy="1.5405E-13"
+        ixz="-3.6864E-13"
+        iyy="1.5316E-05"
+        iyz="3.1946E-13"
+        izz="2.8204E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.93725 0.13725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/wheel_back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_back_left_joint"
+    type="continuous">
+    <origin
+      xyz="-0.00795 0.0325 -0.01125"
+      rpy="1.5708 0 0" />
+    <parent
+      link="motor_back_left_link" />
+    <child
+      link="wheel_back_left_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="base_center_link">
+    <inertial>
+      <origin
+        xyz="0.001635 3.605E-05 0.016389"
+        rpy="0 0 0" />
+      <mass
+        value="0.6199" />
+      <inertia
+        ixx="0.0034797"
+        ixy="-2.4875E-06"
+        ixz="-7.6886E-06"
+        iyy="0.0054485"
+        iyz="-1.1046E-07"
+        izz="0.0086747" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_center_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_center_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_center_joint"
+    type="fixed">
+    <origin
+      xyz="-4.2327E-05 0 0.048"
+      rpy="0 0 0" />
+    <parent
+      link="base_button_link" />
+    <child
+      link="base_center_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="base_top_link">
+    <inertial>
+      <origin
+        xyz="2.2706E-10 -2.0278E-10 -0.013202"
+        rpy="0 0 0" />
+      <mass
+        value="1.113" />
+      <inertia
+        ixx="0.0033512"
+        ixy="-1.4933E-09"
+        ixz="-8.1829E-13"
+        iyy="0.0087528"
+        iyz="6.0315E-13"
+        izz="0.011944" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_top_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/base_top_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_top_joint"
+    type="fixed">
+    <origin
+      xyz="4.2327E-05 0 0.087"
+      rpy="0 0 0" />
+    <parent
+      link="base_center_link" />
+    <child
+      link="base_top_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="head_link">
+    <inertial>
+      <origin
+        xyz="0.00057816 -3.4482E-08 0.0075044"
+        rpy="0 0 0" />
+      <mass
+        value="0.12307" />
+      <inertia
+        ixx="0.00036648"
+        ixy="1.7402E-09"
+        ixz="-9.2172E-07"
+        iyy="0.0003634"
+        iyz="-1.3829E-10"
+        izz="0.00034613" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/head_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56471 0.56471 0.56471 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/head_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="head_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0010467 0 0.053675"
+      rpy="0 0.0016071 0" />
+    <parent
+      link="base_top_link" />
+    <child
+      link="head_link" />
+    <axis
+      xyz="0.0016071 0 -1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="200"
+      velocity="3" />
+  </joint>
+  <link
+    name="camera_link">
+    <inertial>
+      <origin
+        xyz="-0.0077092 -2.6334E-05 0.00016256"
+        rpy="0 0 0" />
+      <mass
+        value="0.0015485" />
+      <inertia
+        ixx="9.8143E-08"
+        ixy="-1.5505E-11"
+        ixz="-2.7478E-09"
+        iyy="6.1527E-08"
+        iyz="3.7675E-10"
+        izz="5.633E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_joint"
+    type="fixed">
+    <origin
+      xyz="0.0609115913645847 0 0.0219227201603984"
+      rpy="0 -0.00160706554797567 0" />
+    <parent
+      link="head_link" />
+    <child
+      link="camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="sound_head_sensor_link">
+    <inertial>
+      <origin
+        xyz="0.0037961 -1.937E-05 -0.00077341"
+        rpy="0 0 0" />
+      <mass
+        value="0.0062754" />
+      <inertia
+        ixx="4.6514E-07"
+        ixy="-4.0868E-10"
+        ixz="-1.3385E-08"
+        iyy="1.7873E-07"
+        iyz="-5.265E-10"
+        izz="3.9264E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/sound_head_sensor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/stepa/ros2_ws/diplom-robot/robot/src/robot/meshes/sound_head_sensor_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="sound_head_sensor_joint"
+    type="fixed">
+    <origin
+      xyz="0.0527675510109658 -2.36759450384788E-05 -0.0129048493707063"
+      rpy="-0.0024378697504773 -0.153268646705425 0.000368316619579277" />
+    <parent
+      link="head_link" />
+    <child
+      link="sound_head_sensor_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  
+  <gazebo>
+    <!-- плагин настройки движения для Gazebo -->
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_button_link</robot_base_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      
+      <wheel_separation>0.3</wheel_separation>
+      <wheel_separation_multiplier>1.0</wheel_separation_multiplier>
+      <wheel_diameter>0.066</wheel_diameter>
+      <wheel_acceleration>1000.0</wheel_acceleration>
+      <wheel_torque>1000.0</wheel_torque>
+      
+      <num_wheel_pairs>2</num_wheel_pairs>
+      <left_joint>wheel_front_left_joint</left_joint>
+      <left_joint>wheel_back_left_joint</left_joint>
+      <right_joint>wheel_front_right_joint</right_joint>
+      <right_joint>wheel_back_right_joint</right_joint>
+      
+      <odometry_source>world</odometry_source>  <!-- world или encoder -->
+      <update_rate>50.0</update_rate>
+    </plugin>
+  </gazebo>
+
+  <ros2_control name="head_control" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint name="head_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>/home/stepa/ros2_ws/diplom-robot/robot/src/robot/config/head_controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+</robot> 
