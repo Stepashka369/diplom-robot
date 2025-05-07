@@ -6,14 +6,14 @@ from launch.actions import ExecuteProcess
 
 
 def generate_launch_description():
-
-    pkg_path = get_package_share_directory('robot')
+    pkg_name = 'robot'
+    pkg_path = get_package_share_directory(pkg_name)
     urdf_path = os.path.join(pkg_path, 'urdf', 'robot.urdf')
 
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
     
-    # Нода robot_state_publisher
+    # нода robot_state_publisher
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -38,19 +38,19 @@ def generate_launch_description():
         output = 'screen'
     )
 
-    diff_drive_spawner = Node(
+    forward_position_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["forward_position_controller"],
+        arguments=["joint_trajectory_controller"],
     )
 
-    joint_broad_spawner = Node(
+    joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
     )
 
-    # Launch!
+    # launch
     return LaunchDescription([
         ExecuteProcess(
             cmd = ['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', 'worlds/empty.world'],
@@ -58,6 +58,6 @@ def generate_launch_description():
         ),
         node_robot_state_publisher,
         node_robot_spawner,
-        diff_drive_spawner,
-        joint_broad_spawner
+        forward_position_controller,
+        joint_state_broadcaster
     ])
