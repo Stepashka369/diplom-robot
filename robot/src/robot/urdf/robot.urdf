@@ -733,7 +733,7 @@
     <child
       link="wheel_front_left_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
   </joint>
   <link
     name="holder_front_right_link">
@@ -892,7 +892,7 @@
     <child
       link="wheel_front_right_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
   </joint>
   <link
     name="holder_back_right_link">
@@ -1051,7 +1051,7 @@
     <child
       link="wheel_back_right_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
   </joint>
   <link
     name="holder_back_left_link">
@@ -1210,7 +1210,7 @@
     <child
       link="wheel_back_left_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
   </joint>
   <link
     name="base_center_link">
@@ -1483,40 +1483,37 @@
       xyz="0 0 0" />
   </joint>
 
-  
-  <gazebo>
-    <!-- плагин настройки движения для Gazebo -->
-    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
-      <command_topic>cmd_vel</command_topic>
-      <odometry_topic>odom</odometry_topic>
-      <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>base_button_link</robot_base_frame>
-      <publish_odom>true</publish_odom>
-      <publish_odom_tf>true</publish_odom_tf>
-      <publish_wheel_tf>true</publish_wheel_tf>
-      
-      <wheel_separation>0.3</wheel_separation>
-      <wheel_separation_multiplier>1.0</wheel_separation_multiplier>
-      <wheel_diameter>0.066</wheel_diameter>
-      <wheel_acceleration>1000.0</wheel_acceleration>
-      <wheel_torque>1000.0</wheel_torque>
-      
-      <num_wheel_pairs>2</num_wheel_pairs>
-      <left_joint>wheel_front_left_joint</left_joint>
-      <left_joint>wheel_back_left_joint</left_joint>
-      <right_joint>wheel_front_right_joint</right_joint>
-      <right_joint>wheel_back_right_joint</right_joint>
-      
-      <odometry_source>world</odometry_source>  <!-- world или encoder -->
-      <update_rate>50.0</update_rate>
-    </plugin>
-  </gazebo>
+  <!-- создние узлов для расположения ик-датчиков расстояния-->
+  <link name="ir_front_center_offset_link"/>
+  <joint name="ir_front_center_offset_joint" type="fixed">
+    <parent link="ir_front_center_link"/>
+    <child link="ir_front_center_offset_link"/>
+    <origin xyz="0.0163 0.0035 -0.006" rpy="0 0 0"/>
+  </joint>
+  <link name="ir_front_right_offset_link"/>
+  <joint name="ir_front_right_offset_joint" type="fixed">
+    <parent link="ir_front_right_link"/>
+    <child link="ir_front_right_offset_link"/>
+    <origin xyz="0.0163 -0.007 -0.006" rpy="0 0 -0.55"/>
+  </joint>
+  <link name="ir_front_left_offset_link"/>
+  <joint name="ir_front_left_offset_joint" type="fixed">
+    <parent link="ir_front_left_link"/>
+    <child link="ir_front_left_offset_link"/>
+    <origin xyz="0.012 0.012 -0.006" rpy="0 0 0.55"/>
+  </joint>
+  <link name="ir_back_center_offset_link"/>
+  <joint name="ir_back_center_offset_joint" type="fixed">
+    <parent link="ir_back_center_link"/>
+    <child link="ir_back_center_offset_link"/>
+    <origin xyz="-0.0163 -0.0035 -0.006" rpy="0 0 3.14159"/>
+  </joint>  
 
+  <!-- настройка вращения головы робота -->
   <ros2_control name="head_control" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
-
     <joint name="head_joint">
       <command_interface name="position"/>
       <command_interface name="velocity"/>
@@ -1525,9 +1522,200 @@
     </joint>
   </ros2_control>
 
+  <!-- настройка шасси робота -->
+  <ros2_control name="skid_street_control" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="wheel_front_left_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="wheel_front_right_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="wheel_back_left_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="wheel_back_right_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- подключение плагина Gazebo для симуляции -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
       <parameters>/home/stepa/ros2_ws/diplom-robot/robot/src/robot/config/head_controller.yaml</parameters>
     </plugin>
   </gazebo>
+  
+  <!-- настройка ик-датчиков расстояния -->
+  <gazebo reference="ir_front_center_offset_link">
+    <sensor name="ir_front_center" type="ray">
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>35</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.38</min_angle>
+            <max_angle>0.38</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.02</min>
+          <max>0.30</max>
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+      <plugin name="ir_front_center_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/Range</output_type>
+        <frame_name>ir_front_center_offset_link</frame_name>
+        <radiation_type>infrared</radiation_type>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="ir_front_right_offset_link">
+    <sensor name="ir_front_right" type="ray">
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>35</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.38</min_angle>
+            <max_angle>0.38</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.02</min>
+          <max>0.30</max>
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+      <plugin name="ir_front_right_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/Range</output_type>
+        <frame_name>ir_front_right_offset_link</frame_name>
+        <radiation_type>infrared</radiation_type>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="ir_front_left_offset_link">
+    <sensor name="ir_front_left" type="ray">
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>35</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.38</min_angle> 
+            <max_angle>0.38</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.02</min> 
+          <max>0.30</max> 
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+      <plugin name="ir_front_left_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/Range</output_type>
+        <frame_name>ir_front_left_offset_link</frame_name>
+        <radiation_type>infrared</radiation_type> 
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="ir_back_center_offset_link">
+    <sensor name="ir_back_center" type="ray">
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>35</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.38</min_angle> 
+            <max_angle>0.38</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.02</min> 
+          <max>0.30</max> 
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+      <plugin name="ir_back_center_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/Range</output_type>
+        <frame_name>ir_back_center_offset_link</frame_name>
+        <radiation_type>infrared</radiation_type>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- настройка подключения камеры -->
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <visualize>true</visualize>
+      <update_rate>30</update_rate>
+      <camera>
+        <horizontal_fov>1.16937</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>/robot</namespace>
+        </ros>
+        <camera_name>front_camera</camera_name>
+        <frame_name>camera_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- настройка подключения ультрозвукового датчика -->
+  <gazebo reference="sound_head_sensor_link">
+    <sensor name="sound_head_sensor" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>20</update_rate>  <!-- 20 Гц (50ms interval) -->
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>16</samples>      <!-- 15° при 16 лучах -->
+            <resolution>1</resolution>
+            <min_angle>-0.2618</min_angle>  <!-- -15° в радианах -->
+            <max_angle>0.2618</max_angle>    <!-- +15° в радианах -->
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.02</min>              <!-- 2 см минимальная дистанция -->
+          <max>4.0</max>               <!-- Максимум 4 метра -->
+          <resolution>0.003</resolution> <!-- 0.3 см разрешение -->
+        </range>
+      </ray>
+      <plugin name="ultrasonic_head_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/Range</output_type>
+        <frame_name>sound_head_sensor_link</frame_name>
+        <radiation_type>ultrasound</radiation_type>
+      </plugin>
+    </sensor>
+  </gazebo>
+
 </robot> 

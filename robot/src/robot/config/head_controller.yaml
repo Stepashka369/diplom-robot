@@ -1,19 +1,3 @@
-# controller_manager:
-#   ros__parameters:
-#     update_rate: 30
-#     use_sim_time: true
-
-#     joint_state_broadcaster:
-#       type: joint_state_broadcaster/JointStateBroadcaster
-
-#     forward_position_controller:
-#       type: position_controllers/JointGroupPositionController
-
-# forward_position_controller:
-#   ros__parameters:
-#     joints:
-#       - head_joint
-
 controller_manager:
   ros__parameters:
     update_rate: 100
@@ -24,6 +8,10 @@ controller_manager:
 
     joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
+
+    skid_street_controller:
+      type: diff_drive_controller/DiffDriveController
+    
 
 joint_trajectory_controller:
   ros__parameters:
@@ -47,3 +35,18 @@ joint_trajectory_controller:
         trajectory: 0.05  # Допустимая ошибка во время движения (рад)
         goal: 0.03  # Допустимая ошибка при достижении цели (рад)
 
+
+skid_street_controller:
+  ros__parameters:
+    left_wheel_names: 
+      - wheel_front_left_joint
+      - wheel_back_left_joint
+    right_wheel_names: 
+      - wheel_front_right_joint
+      - wheel_back_right_joint
+    wheel_separation: 0.30
+    wheel_radius: 0.033
+    publish_rate: 50.0
+    base_frame_id: base_button_link
+    use_stamped_vel: false
+   

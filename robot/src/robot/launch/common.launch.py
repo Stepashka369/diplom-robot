@@ -44,6 +44,12 @@ def generate_launch_description():
         arguments=["joint_trajectory_controller"],
     )
 
+    skid_street_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["skid_street_controller"],
+    )
+
     joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
@@ -59,5 +65,6 @@ def generate_launch_description():
         node_robot_state_publisher,
         node_robot_spawner,
         forward_position_controller,
+        skid_street_controller,
         joint_state_broadcaster
     ])
