@@ -18,7 +18,20 @@ setup(
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
         (os.path.join('share', package_name, 'nodes'), glob('nodes/*')),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'rclpy',
+        'std_msgs',
+        'websockets>=10.0',
+        'fastapi>=0.68.0',
+        'uvicorn>=0.15.0',
+        'python-keycloak>=2.10.0',
+        'python-dotenv>=0.19.0',
+        'pydantic>=2.0.0',
+        'pydantic-settings>=2.0.0',
+        'typing-extensions>=4.0.0',
+        'annotated-types>=0.4.0'
+    ],
     zip_safe=True,
     maintainer='stepa',
     maintainer_email='kardash-99@list.ru',
@@ -27,8 +40,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'movement = nodes.base_movement_node:main',
-            'rotate = nodes.head_movement_node:main'
+            '_movement = nodes.base_movement_node:main',
+            '_rotate = nodes.head_movement_node:main',
+            '_bridge = bridge.main:main'
         ],
     },
 )

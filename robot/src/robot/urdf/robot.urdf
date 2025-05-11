@@ -1510,7 +1510,7 @@
   </joint>  
 
   <!-- настройка вращения головы робота -->
-  <ros2_control name="head_control" type="system">
+  <ros2_control name="head__rotation_control" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
@@ -1523,7 +1523,7 @@
   </ros2_control>
 
   <!-- настройка шасси робота -->
-  <ros2_control name="skid_street_control" type="system">
+  <ros2_control name="chassis_control" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
@@ -1552,7 +1552,8 @@
   <!-- подключение плагина Gazebo для симуляции -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <parameters>/home/stepa/ros2_ws/diplom-robot/robot/src/robot/config/head_controller.yaml</parameters>
+      <parameters>/home/stepa/ros2_ws/diplom-robot/robot/src/robot/config/config.yaml</parameters>
+      <robot_namespace>/robot</robot_namespace>
     </plugin>
   </gazebo>
   
@@ -1680,10 +1681,7 @@
         </clip>
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-        <ros>
-          <namespace>/robot</namespace>
-        </ros>
-        <camera_name>front_camera</camera_name>
+        <camera_name>camera_controller</camera_name>
         <frame_name>camera_link</frame_name>
       </plugin>
     </sensor>
@@ -1694,28 +1692,27 @@
     <sensor name="sound_head_sensor" type="ray">
       <pose>0 0 0 0 0 0</pose>
       <visualize>true</visualize>
-      <update_rate>20</update_rate>  <!-- 20 Гц (50ms interval) -->
+      <update_rate>20</update_rate>
       <ray>
         <scan>
           <horizontal>
-            <samples>16</samples>      <!-- 15° при 16 лучах -->
+            <samples>16</samples> 
             <resolution>1</resolution>
-            <min_angle>-0.2618</min_angle>  <!-- -15° в радианах -->
-            <max_angle>0.2618</max_angle>    <!-- +15° в радианах -->
+            <min_angle>-0.2618</min_angle> 
+            <max_angle>0.2618</max_angle>   
           </horizontal>
         </scan>
         <range>
-          <min>0.02</min>              <!-- 2 см минимальная дистанция -->
-          <max>4.0</max>               <!-- Максимум 4 метра -->
-          <resolution>0.003</resolution> <!-- 0.3 см разрешение -->
+          <min>0.02</min>    
+          <max>4.0</max>    
+          <resolution>0.003</resolution>
         </range>
       </ray>
       <plugin name="ultrasonic_head_controller" filename="libgazebo_ros_ray_sensor.so">
         <output_type>sensor_msgs/Range</output_type>
         <frame_name>sound_head_sensor_link</frame_name>
-        <radiation_type>ultrasound</radiation_type>
+        <radiationType>ultrasound</radiationType>
       </plugin>
     </sensor>
   </gazebo>
-
 </robot> 

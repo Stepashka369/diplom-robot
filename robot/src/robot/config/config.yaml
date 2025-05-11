@@ -1,0 +1,52 @@
+robot/controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    head_rotation_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    chassis_controller:
+      type: diff_drive_controller/DiffDriveController
+    
+
+robot/head_rotation_controller:
+  ros__parameters:
+    joints:
+      - head_joint
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false 
+    interpolate_from_desired_state: true 
+    open_loop_control: false  
+    state_publish_rate: 50.0 
+    constraints:
+      stopped_velocity_tolerance: 0.01 
+      goal_time: 0.0 
+      head_joint: 
+        trajectory: 0.05  
+        goal: 0.03  
+
+
+robot/chassis_controller:
+  ros__parameters:
+    left_wheel_names: 
+      - wheel_front_left_joint
+      - wheel_back_left_joint
+    right_wheel_names: 
+      - wheel_front_right_joint
+      - wheel_back_right_joint
+    wheel_separation: 0.30
+    wheel_radius: 0.033
+    publish_rate: 50.0
+    base_frame_id: base_button_link
+    use_stamped_vel: false
+   

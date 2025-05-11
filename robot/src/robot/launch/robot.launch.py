@@ -7,33 +7,34 @@ from launch.actions import ExecuteProcess
 
 def generate_launch_description():
     pkg_name = 'robot'
+    robot_namespace = '/robot'
     pkg_path = get_package_share_directory(pkg_name)
     urdf_path = os.path.join(pkg_path, 'urdf', 'robot.urdf')
-
+    
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
     
-    # нода robot_state_publisher
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
+        namespace=robot_namespace,
         parameters=[{
             'robot_description': robot_description,
-            'use_sim_time': True
+            'use_sim_time': True,
+            'frame_prefix': 'robot/',
         }]
     )
 
-    # спавн робота
     node_robot_spawner = Node(
         package = 'gazebo_ros',
         executable = 'spawn_entity.py',
         arguments = [
             '-entity', 'robot',
-            '-topic', 'robot_description',
-            '-x', '0.0', '-y', '0.0', '-z', '0.1',  # Приподнять над землей
+            '-topic', 'robot/robot_description',
+            '-x', '0.0', '-y', '0.0', '-z', '0.1',
             '-timeout', '30',
-            '-robot_namespace', '/'
+            '-robot_namespace', robot_namespace
         ],
         output = 'screen'
     )
@@ -41,22 +42,24 @@ def generate_launch_description():
     forward_position_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller"],
+        arguments=["head_rotation_controller"],
+        namespace=robot_namespace,
     )
 
     skid_street_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["skid_street_controller"],
+        arguments=["chassis_controller"],
+        namespace=robot_namespace,
     )
 
     joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
+        namespace=robot_namespace,
     )
 
-    # launch
     return LaunchDescription([
         ExecuteProcess(
             cmd = ['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', 'worlds/empty.world'],

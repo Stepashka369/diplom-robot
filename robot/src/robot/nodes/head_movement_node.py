@@ -6,7 +6,7 @@ from builtin_interfaces.msg import Duration
 class HeadMovementNode(Node):
     def __init__(self):
         super().__init__('head_movement_node')
-        self.publisher = self.create_publisher(JointTrajectory, '/joint_trajectory_controller/joint_trajectory', 10)
+        self.publisher = self.create_publisher(JointTrajectory, '/robot/joint_trajectory_controller/joint_trajectory', 10)
         self.logger = self.get_logger()
         self.velocity = 3.0 # скорость в радианах/сек
         self.nanosec = 10**9  # множитель для дробной части времени
