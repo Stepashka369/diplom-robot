@@ -60,6 +60,14 @@ def generate_launch_description():
         namespace=robot_namespace,
     )
 
+    # ir_sensor_agregator_node = Node(
+    #     package='robot',
+    #     executable='ir_sensor_aggregator',
+    #     name='range_aggregator_node',
+    #     output='screen',
+    #     namespace=robot_namespace,
+    # )
+
     return LaunchDescription([
         ExecuteProcess(
             cmd = ['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', 'worlds/empty.world'],
@@ -69,5 +77,6 @@ def generate_launch_description():
         node_robot_spawner,
         forward_position_controller,
         skid_street_controller,
-        joint_state_broadcaster
+        joint_state_broadcaster,
+        # ir_sensor_agregator_node
     ])

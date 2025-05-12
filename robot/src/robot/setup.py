@@ -17,6 +17,7 @@ setup(
         (os.path.join('share', package_name, 'config'), glob('config/*')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
         (os.path.join('share', package_name, 'nodes'), glob('nodes/*')),
+        (os.path.join('share', package_name, 'msg'), glob('msg/*')),
     ],
     install_requires=[
         'setuptools',
@@ -42,7 +43,8 @@ setup(
         'console_scripts': [
             '_movement = nodes.base_movement_node:main',
             '_rotate = nodes.head_movement_node:main',
-            '_bridge = bridge.main:main'
+            '_bridge = bridge.main:main',
+            '_agregator = nodes.ir_sensor_agregator:main'
         ],
     },
 )
