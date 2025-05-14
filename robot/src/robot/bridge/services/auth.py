@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status
 from keycloak.exceptions import KeycloakAuthenticationError
+from fastapi.security import HTTPAuthorizationCredentials
 from bridge.configs.auth_config import keycloak_openid
 from bridge.models.schemas import UserInfo
 
@@ -32,4 +33,16 @@ class AuthService:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
+            )
+    
+    @staticmethod
+    def check_token(credentials: HTTPAuthorizationCredentials):
+        token = credentials.credentials
+        user_info = AuthService.verify_token(token)
+
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+                headers={"WWW-Authenticate": "Bearer"},
             )

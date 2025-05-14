@@ -1,0 +1,11 @@
+class Constants:
+    IR_SENSOR_AGREGATOR_NODE = "ir_sensor_agregator_node"
+    IR_BACK_CENTER_TOPIC = "/robot/ir_back_center_controller/out"
+    IR_FRONT_CENTER_TOPIC = "/robot/ir_front_center_controller/out"
+    IR_FRONT_LEFT_TOPIC = "/robot/ir_front_left_controller/out"
+    IR_FRONT_RIGHT_TOPIC = "/robot/ir_front_right_controller/out"
+    IR_JOINED_INFO_TOPIC = "/robot/ir_joined_info"
+    IR_SENSOR_BRIDGE_NODE = "ir_sensor_bridge_node"
+    ULTRASONIC_INFO_TOPIC = "/robot/ultrasonic_info"
+    ULTRASONIC_SENSOR_BRIDGE_NODE = "ultrasonic_sensor_bridge_node"
+    ULTRASONIC_SENSOR_NODE = "ultrasonic_sensor_node"
