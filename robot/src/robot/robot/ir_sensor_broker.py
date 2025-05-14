@@ -8,9 +8,9 @@ from msg.sensor_info import SensorInfo
 from config.constants import Constants
 
 
-class IrSensorAgregator(Node):
+class IrSensorBroker(Node):
     def __init__(self):
-        super().__init__(Constants.IR_SENSOR_AGREGATOR_NODE)
+        super().__init__(Constants.IR_SENSOR_BROKER)
         self.pub_timer = self.create_timer(0.1, self.publish_joined_info)
         self.sub_back_center = self.create_subscription(Range, 
                                  Constants.IR_BACK_CENTER_TOPIC, 
@@ -24,8 +24,7 @@ class IrSensorAgregator(Node):
         self.sub_front_right = self.create_subscription(Range, 
                                  Constants.IR_FRONT_RIGHT_TOPIC, 
                                  lambda msg: self.subscriber_callback(msg, Constants.IR_FRONT_RIGHT_TOPIC), 10)
-        self.pub_joined = self.create_publisher(String, 
-                                                Constants.IR_JOINED_INFO_TOPIC, 10)
+        self.pub_joined = self.create_publisher(String, Constants.IR_JOINED_INFO_TOPIC, 10)
         self.joined_info = IrSensorsInfo(
             front_center=SensorInfo(min_range=0.0, max_range=0.0, range=0.0),
             front_left=SensorInfo(min_range=0.0, max_range=0.0, range=0.0),
@@ -55,19 +54,24 @@ class IrSensorAgregator(Node):
         json_msg = json.dumps(self.joined_info.to_dict(), indent=2)        
         msg = String(data=json_msg)            
         self.pub_joined.publish(msg)
-        self.get_logger().info(f"Published: {json_msg}")
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = IrSensorAgregator()
+    node = IrSensorBroker()
+    
     try:
+        node.get_logger().info("IrSensorBroker have started")
         rclpy.spin(node)
     except KeyboardInterrupt:
-        pass
+        node.get_logger().info("IrSensorBroker have been stopped")
+    except Exception as e:
+        node.get_logger().error(f"IrSensorBroker error: {str(e)}")
     finally:
         node.destroy_node()
         rclpy.shutdown()
+        node.get_logger().info("IrSensorBroker shutdown complete")
+
 
 if __name__ == '__main__':
     main()

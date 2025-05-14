@@ -3,7 +3,7 @@ from rclpy.node import Node
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 
-class HeadMovementNode(Node):
+class HeadBroker(Node):
     def __init__(self):
         super().__init__('head_movement_node')
         self.publisher = self.create_publisher(JointTrajectory, '/robot/joint_trajectory_controller/joint_trajectory', 10)
@@ -38,7 +38,7 @@ class HeadMovementNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    controller = HeadMovementNode()
+    controller = HeadBroker()
     
     # Однократная публикация и завершение
     rclpy.spin_once(controller, timeout_sec=1.0)  # Даем время на публикацию

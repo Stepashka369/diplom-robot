@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
-class BaseMovementNode(Node):
+class ChassisBroker(Node):
     def __init__(self):
         super().__init__('base_movement_node')
         self.publisher_ = self.create_publisher(Twist, '/skid_street_controller/cmd_vel_unstamped', 10)
@@ -36,7 +36,7 @@ class BaseMovementNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = BaseMovementNode()
+    node = ChassisBroker()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

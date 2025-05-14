@@ -2,7 +2,7 @@ from fastapi import APIRouter, WebSocket, Depends, WebSocketDisconnect
 from fastapi.security import HTTPAuthorizationCredentials
 from bridge.services.auth import AuthService
 from bridge.configs.auth_config import bearer_scheme
-from robot.bridge.services.sensors import Sensors
+from bridge.services.sensors import Sensors
 from fastapi.responses import HTMLResponse
 from config.constants import Constants
 
@@ -10,7 +10,41 @@ from config.constants import Constants
 router = APIRouter(prefix="/robot", tags=["Robot"])
 
 
-html = """
+html_ultrasonic = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <h1>WebSocket Chat</h1>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <ul id='messages'>
+        </ul>
+        <script>
+            var ws = new WebSocket("ws://localhost:8383/robot/ws/ultrasonic-sensor");
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+    </body>
+</html>
+"""
+
+html_ir = """
 <!DOCTYPE html>
 <html>
     <head>
@@ -44,9 +78,15 @@ html = """
 </html>
 """
 
-@router.get("/control")
-async def control():
-    return HTMLResponse(html)
+
+@router.get("/ir_sensors")
+async def ir_sensors():
+    return HTMLResponse(html_ir)
+
+
+@router.get("/ultrasonic_sensor")
+async def ultrasonic_sensor():
+    return HTMLResponse(html_ultrasonic)
 
 
 @router.websocket("/ws/ir-sensors")

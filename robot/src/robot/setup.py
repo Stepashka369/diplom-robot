@@ -16,7 +16,6 @@ setup(
         (os.path.join('share', package_name, 'meshes'), glob('meshes/*')),
         (os.path.join('share', package_name, 'config'), glob('config/*')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
-        (os.path.join('share', package_name, 'nodes'), glob('nodes/*')),
         (os.path.join('share', package_name, 'msg'), glob('msg/*')),
     ],
     install_requires=[
@@ -41,10 +40,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            '_movement = nodes.base_movement_node:main',
-            '_rotate = nodes.head_movement_node:main',
+            'ir_sensor_broker = robot.ir_sensor_broker:main',
+            'ultrasonic_sensor_broker = robot.ultrasonic_sensor_broker:main',
             '_bridge = bridge.main:main',
-            '_agregator = nodes.ir_sensor_agregator:main'
         ],
     },
 )

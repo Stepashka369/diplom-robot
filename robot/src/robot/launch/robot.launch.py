@@ -3,14 +3,13 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess
+from config.constants import Constants
 
 
 def generate_launch_description():
-    pkg_name = 'robot'
-    robot_namespace = '/robot'
-    pkg_path = get_package_share_directory(pkg_name)
+    pkg_path = get_package_share_directory(Constants.PKG_NAME)
     urdf_path = os.path.join(pkg_path, 'urdf', 'robot.urdf')
-    
+
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
     
@@ -18,7 +17,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
-        namespace=robot_namespace,
+        namespace=Constants.ROBOT_NAMESPACE,
         parameters=[{
             'robot_description': robot_description,
             'use_sim_time': True,
@@ -34,7 +33,7 @@ def generate_launch_description():
             '-topic', 'robot/robot_description',
             '-x', '0.0', '-y', '0.0', '-z', '0.1',
             '-timeout', '30',
-            '-robot_namespace', robot_namespace
+            '-robot_namespace', Constants.ROBOT_NAMESPACE
         ],
         output = 'screen'
     )
@@ -43,30 +42,36 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["head_rotation_controller"],
-        namespace=robot_namespace,
+        namespace=Constants.ROBOT_NAMESPACE
     )
 
     skid_street_controller = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["chassis_controller"],
-        namespace=robot_namespace,
+        namespace=Constants.ROBOT_NAMESPACE
     )
 
     joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
-        namespace=robot_namespace,
+        namespace=Constants.ROBOT_NAMESPACE
     )
 
-    # ir_sensor_agregator_node = Node(
-    #     package='robot',
-    #     executable='ir_sensor_aggregator',
-    #     name='range_aggregator_node',
-    #     output='screen',
-    #     namespace=robot_namespace,
-    # )
+    ir_sensor_broker = Node(
+        package='robot',
+        executable='ir_sensor_broker',
+        name='ir_sensor_broker',
+        namespace=Constants.ROBOT_NAMESPACE
+    )
+
+    ultrasonic_sensor_broker = Node(
+        package='robot',
+        executable='ultrasonic_sensor_broker',
+        name='ultrasonic_sensor_broker',
+        namespace=Constants.ROBOT_NAMESPACE
+    )
 
     return LaunchDescription([
         ExecuteProcess(
@@ -78,5 +83,6 @@ def generate_launch_description():
         forward_position_controller,
         skid_street_controller,
         joint_state_broadcaster,
-        # ir_sensor_agregator_node
+        ir_sensor_broker,
+        ultrasonic_sensor_broker
     ])
