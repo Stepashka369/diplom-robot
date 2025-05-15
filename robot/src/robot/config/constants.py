@@ -12,3 +12,5 @@ class Constants:
     ULTRASONIC_SENSOR_BRIDGE_NODE = "ultrasonic_sensor_bridge_node"
     ULTRASONIC_SENSOR_BROKER = "ultrasonic_sensor_broker"
     ULTRASONIC_HEAD_TOPIC = "/robot/ultrasonic_head_controller/out"
+    CAMERA_BRIDGE_NODE = "camera_bridge_node"
+    CAMERA_TOPIC = "/robot/camera_controller/image_raw"

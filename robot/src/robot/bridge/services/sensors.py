@@ -14,6 +14,7 @@ class Sensors(Node):
         self.active = True 
         self.connection_check_timer = self.create_timer(1.0, self.check_connection)
         self.subscription = self.create_subscription(String, topic_name, self.sensor_callback, 10)
+        self.get_logger().error("Node {} created, topic name {}".format(node_name, topic_name))
 
 
     def check_connection(self):
@@ -61,22 +62,22 @@ class Sensors(Node):
             await self.shutdown_node()
 
 
-    @staticmethod
-    async def start_node(websocket, node_name, topic_name):
-        rclpy.init()
-        node = Sensors(websocket=websocket, 
-                      node_name=node_name,
-                      topic_name=topic_name)
+    # @staticmethod
+    # async def start_node(websocket, node_name, topic_name):
+    #     rclpy.init()
+    #     node = Sensors(websocket=websocket, 
+    #                   node_name=node_name,
+    #                   topic_name=topic_name)
     
-        try:
-            while node.active and rclpy.ok():
-                rclpy.spin_once(node, timeout_sec=0.1)
-                await asyncio.sleep(0.01)
-        except WebSocketDisconnect:
-            node.get_logger().info("Client disconnected")
-        except Exception as e:
-            node.get_logger().error(f"Error: {e}")
-        finally:
-            if rclpy.ok():
-                node.destroy_node()
-                rclpy.shutdown()
+    #     try:
+    #         while node.active and rclpy.ok():
+    #             rclpy.spin_once(node, timeout_sec=0.1)
+    #             await asyncio.sleep(0.01)
+    #     except WebSocketDisconnect:
+    #         node.get_logger().info("Client disconnected")
+    #     except Exception as e:
+    #         node.get_logger().error(f"Error: {e}")
+    #     finally:
+    #         if rclpy.ok():
+    #             node.destroy_node()
+    #             rclpy.shutdown()
