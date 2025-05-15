@@ -118,6 +118,149 @@ html_camera_simple = """
 </html>
 """
 
+# html_camera = """
+# <!DOCTYPE html>
+# <html>
+# <head>
+#     <title>ROS 2 Video Stream</title>
+#     <style>
+#         body {
+#             font-family: Arial, sans-serif;
+#             max-width: 800px;
+#             margin: 0 auto;
+#             padding: 20px;
+#         }
+#         h1 {
+#             color: #333;
+#             text-align: center;
+#         }
+#         #videoContainer {
+#             margin: 20px 0;
+#             text-align: center;
+#         }
+#         #videoStream {
+#             max-width: 100%;
+#             border: 2px solid #333;
+#             border-radius: 5px;
+#         }
+#         .controls {
+#             text-align: center;
+#             margin: 15px 0;
+#         }
+#         button {
+#             padding: 8px 15px;
+#             background-color: #4CAF50;
+#             color: white;
+#             border: none;
+#             border-radius: 4px;
+#             cursor: pointer;
+#         }
+#         button:hover {
+#             background-color: #45a049;
+#         }
+#         #status {
+#             margin-top: 10px;
+#             padding: 10px;
+#             border-radius: 4px;
+#             text-align: center;
+#         }
+#         .connected {
+#             background-color: #dff0d8;
+#             color: #3c763d;
+#         }
+#         .disconnected {
+#             background-color: #f2dede;
+#             color: #a94442;
+#         }
+#     </style>
+# </head>
+# <body>
+#     <h1>ROS 2 Camera Stream</h1>
+    
+#     <div id="videoContainer">
+#         <img id="videoStream" src="" alt="Video Stream">
+#     </div>
+    
+#     <div class="controls">
+#         <button id="connectBtn">Connect</button>
+#         <button id="disconnectBtn">Disconnect</button>
+#     </div>
+    
+#     <div id="status" class="disconnected">Disconnected</div>
+    
+#     <script>
+#         const videoElement = document.getElementById('videoStream');
+#         const connectBtn = document.getElementById('connectBtn');
+#         const disconnectBtn = document.getElementById('disconnectBtn');
+#         const statusDiv = document.getElementById('status');
+        
+#         let ws = null;
+#         let frameCount = 0;
+#         let lastUpdateTime = Date.now();
+#         let fps = 0;
+        
+#         // Функция подключения к WebSocket
+#         function connectWebSocket() {
+#             console.log("button clicked")
+#             if (ws && ws.readyState === WebSocket.OPEN) {
+#                 return;
+#             }
+            
+#             ws = new WebSocket("ws://localhost:8383/robot/ws/camera);
+            
+#             ws.onopen = function() {
+#                 statusDiv.textContent = "Connected to ROS 2 Camera";
+#                 statusDiv.className = "status connected";
+#                 console.log("WebSocket connection established");
+#             };
+            
+#             ws.onmessage = function(event) {
+#                 // Обновляем изображение
+#                 videoElement.src = event.data;
+                
+#                 // Рассчитываем FPS
+#                 frameCount++;
+#                 const now = Date.now();
+#                 if (now - lastUpdateTime >= 1000) {
+#                     fps = frameCount;
+#                     frameCount = 0;
+#                     lastUpdateTime = now;
+#                     statusDiv.textContent = `Streaming (${fps} FPS)`;
+#                 }
+#             };
+            
+#             ws.onerror = function(error) {
+#                 console.error("WebSocket error:", error);
+#                 statusDiv.textContent = "Connection error";
+#                 statusDiv.className = "status disconnected";
+#             };
+            
+#             ws.onclose = function() {
+#                 console.log("WebSocket connection closed");
+#                 statusDiv.textContent = "Disconnected";
+#                 statusDiv.className = "status disconnected";
+#                 videoElement.src = "";
+#             };
+#         }
+        
+#         // Функция отключения
+#         function disconnectWebSocket() {
+#             if (ws) {
+#                 ws.close();
+#             }
+#         }
+        
+#         // Обработчики кнопок
+#         connectBtn.addEventListener('click', connectWebSocket);
+#         disconnectBtn.addEventListener('click', disconnectWebSocket);
+        
+#         // Автоподключение при загрузке страницы
+#         window.onload = connectWebSocket;
+#     </script>
+# </body>
+# </html>
+# """
+
 html_camera = """
 <!DOCTYPE html>
 <html>
@@ -125,137 +268,53 @@ html_camera = """
     <title>ROS 2 Video Stream</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
-        }
-        h1 {
-            color: #333;
             text-align: center;
-        }
-        #videoContainer {
-            margin: 20px 0;
-            text-align: center;
+            background: #f5f5f5;
         }
         #videoStream {
             max-width: 100%;
+            max-height: 80vh;
             border: 2px solid #333;
             border-radius: 5px;
-        }
-        .controls {
-            text-align: center;
-            margin: 15px 0;
-        }
-        button {
-            padding: 8px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
+            background: #000;
         }
         #status {
             margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-        }
-        .connected {
-            background-color: #dff0d8;
-            color: #3c763d;
-        }
-        .disconnected {
-            background-color: #f2dede;
-            color: #a94442;
+            font-family: Arial, sans-serif;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <h1>ROS 2 Camera Stream</h1>
-    
-    <div id="videoContainer">
-        <img id="videoStream" src="" alt="Video Stream">
-    </div>
-    
-    <div class="controls">
-        <button id="connectBtn">Connect</button>
-        <button id="disconnectBtn">Disconnect</button>
-    </div>
-    
-    <div id="status" class="disconnected">Disconnected</div>
-    
+    <img id="videoStream" src="" alt="Video Stream">
+    <div id="status">Connecting...</div>
+
     <script>
         const videoElement = document.getElementById('videoStream');
-        const connectBtn = document.getElementById('connectBtn');
-        const disconnectBtn = document.getElementById('disconnectBtn');
         const statusDiv = document.getElementById('status');
         
-        let ws = null;
-        let frameCount = 0;
-        let lastUpdateTime = Date.now();
-        let fps = 0;
+        // Автоматическое подключение при загрузке страницы
+        const ws = new WebSocket("ws://localhost:8383/robot/ws/camera");
         
-        // Функция подключения к WebSocket
-        function connectWebSocket() {
-            console.log("button clicked")
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                return;
-            }
-            
-            ws = new WebSocket("ws://localhost:8383/robot/ws/camera);
-            
-            ws.onopen = function() {
-                statusDiv.textContent = "Connected to ROS 2 Camera";
-                statusDiv.className = "status connected";
-                console.log("WebSocket connection established");
-            };
-            
-            ws.onmessage = function(event) {
-                // Обновляем изображение
-                videoElement.src = event.data;
-                
-                // Рассчитываем FPS
-                frameCount++;
-                const now = Date.now();
-                if (now - lastUpdateTime >= 1000) {
-                    fps = frameCount;
-                    frameCount = 0;
-                    lastUpdateTime = now;
-                    statusDiv.textContent = `Streaming (${fps} FPS)`;
-                }
-            };
-            
-            ws.onerror = function(error) {
-                console.error("WebSocket error:", error);
-                statusDiv.textContent = "Connection error";
-                statusDiv.className = "status disconnected";
-            };
-            
-            ws.onclose = function() {
-                console.log("WebSocket connection closed");
-                statusDiv.textContent = "Disconnected";
-                statusDiv.className = "status disconnected";
-                videoElement.src = "";
-            };
-        }
+        ws.onopen = function() {
+            statusDiv.textContent = "Connected - Streaming";
+        };
         
-        // Функция отключения
-        function disconnectWebSocket() {
-            if (ws) {
-                ws.close();
-            }
-        }
+        ws.onmessage = function(event) {
+            videoElement.src = event.data;
+        };
         
-        // Обработчики кнопок
-        connectBtn.addEventListener('click', connectWebSocket);
-        disconnectBtn.addEventListener('click', disconnectWebSocket);
+        ws.onerror = function() {
+            statusDiv.textContent = "Connection error";
+        };
         
-        // Автоподключение при загрузке страницы
-        window.onload = connectWebSocket;
+        ws.onclose = function() {
+            statusDiv.textContent = "Disconnected";
+            videoElement.src = "";
+        };
     </script>
 </body>
 </html>

@@ -20,6 +20,16 @@ class NodeManager:
             rclpy.init()
             self.initialized = True
 
+    
+    def remove_node(self, node_name: str):
+        if node_name in self.nodes:
+            try:
+                self.nodes[node_name].destroy_node()
+                print(f"Node destroyed")
+            except Exception as e:
+                print(f"Error destroying node: {e}")
+            del self.nodes[node_name]
+
 
     async def spin_nodes(self):
         self.init_ros()
@@ -36,38 +46,24 @@ class NodeManager:
                     if node not in self.nodes.values():
                         executor.remove_node(node)
                 
-                executor.spin_once(timeout_sec=0.1)
-                await asyncio.sleep(0.1)
+                executor.spin_once(timeout_sec=0.02)
+                await asyncio.sleep(0.03)
                 
         except Exception as e:
             pass
         finally:
             self.shutdown()
 
+
     def create_node(self, node_class, **kwargs) -> Node:
         self.init_ros()
         node_name = kwargs.get("node_name")
+
         if node_name in self.nodes:
-            return self.nodes[node_name]
+            self.remove_node(node_name)
         
         node = node_class(**kwargs)
         self.nodes[node_name] = node
-        # return node
-    
-
-    # async def spin_nodes(self):
-    #     executor = rclpy.executors.MultiThreadedExecutor()
-    #     for node in self.nodes.values():
-    #         executor.add_node(node)
-        
-    #     try:
-    #         while True:
-    #             executor.spin_once(timeout_sec=0.1)
-    #             await asyncio.sleep(0.1)
-    #     except Exception as e:
-    #         print(f"Spin error: {e}")
-    #     finally:
-    #         self.shutdown()
     
 
     def shutdown(self):
