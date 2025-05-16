@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist
 class ChassisBroker(Node):
     def __init__(self):
         super().__init__('base_movement_node')
-        self.publisher_ = self.create_publisher(Twist, '/skid_street_controller/cmd_vel_unstamped', 10)
+        self.publisher_ = self.create_publisher(Twist, '/chassis_controller/cmd_vel_unstamped', 10)
         self.timer = self.create_timer(0.2, self.publish_cmd_vel)
         self.move_index = 0
         self.moves = [

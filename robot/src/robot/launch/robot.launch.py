@@ -13,64 +13,56 @@ def generate_launch_description():
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
     
-    node_robot_state_publisher = Node(
+    robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
-        namespace=Constants.ROBOT_NAMESPACE,
         parameters=[{
             'robot_description': robot_description,
             'use_sim_time': True,
-            'frame_prefix': 'robot/',
         }]
     )
 
-    node_robot_spawner = Node(
+    robot_spawner_node = Node(
         package = 'gazebo_ros',
         executable = 'spawn_entity.py',
         arguments = [
             '-entity', 'robot',
-            '-topic', 'robot/robot_description',
+            '-topic', 'robot_description',
             '-x', '0.0', '-y', '0.0', '-z', '0.1',
             '-timeout', '30',
-            '-robot_namespace', Constants.ROBOT_NAMESPACE
         ],
         output = 'screen'
     )
 
-    forward_position_controller = Node(
+    head_rotation_controller_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["head_rotation_controller"],
-        namespace=Constants.ROBOT_NAMESPACE
     )
 
-    skid_street_controller = Node(
+    chassis_controller_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["chassis_controller"],
-        namespace=Constants.ROBOT_NAMESPACE
     )
 
-    joint_state_broadcaster = Node(
+    joint_state_broadcaster_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
-        namespace=Constants.ROBOT_NAMESPACE
     )
 
-    ir_sensor_broker = Node(
+    ir_sensor_broker_node = Node(
         package='robot',
         executable='ir_sensor_broker',
         name='ir_sensor_broker',
-        namespace=Constants.ROBOT_NAMESPACE
     )
 
-    ultrasonic_sensor_broker = Node(
+    ultrasonic_sensor_broker_node = Node(
         package='robot',
         executable='ultrasonic_sensor_broker',
         name='ultrasonic_sensor_broker',
-        namespace=Constants.ROBOT_NAMESPACE
     )
 
     return LaunchDescription([
@@ -78,11 +70,11 @@ def generate_launch_description():
             cmd = ['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', 'worlds/empty.world'],
             output ='screen'
         ),
-        node_robot_state_publisher,
-        node_robot_spawner,
-        forward_position_controller,
-        skid_street_controller,
-        joint_state_broadcaster,
-        ir_sensor_broker,
-        ultrasonic_sensor_broker
+        robot_state_publisher_node,
+        robot_spawner_node,
+        head_rotation_controller_node,
+        chassis_controller_node,
+        joint_state_broadcaster_node,
+        ir_sensor_broker_node,
+        ultrasonic_sensor_broker_node
     ])

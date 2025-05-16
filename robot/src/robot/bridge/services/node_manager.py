@@ -34,7 +34,6 @@ class NodeManager:
     async def spin_nodes(self):
         self.init_ros()
         executor = rclpy.executors.MultiThreadedExecutor()
-        
         try:
             while True:
                 current_nodes = set(executor.get_nodes())
@@ -48,11 +47,24 @@ class NodeManager:
                 
                 executor.spin_once(timeout_sec=0.02)
                 await asyncio.sleep(0.03)
-                
         except Exception as e:
-            pass
+            print(f"Error while spinning nodes {e}")
         finally:
             self.shutdown()
+
+
+    async def spin_node_once(self, node_class, **kwargs):
+        self.init_ros()
+        temp_node = node_class(**kwargs)
+        try:
+            executor = rclpy.executors.SingleThreadedExecutor()
+            executor.add_node(temp_node)
+            executor.spin_once(timeout_sec=1.0)
+            await asyncio.sleep(1.0)
+        except Exception as e:
+            print(f"Error while spinning node once: {e}")
+        finally:
+            temp_node.destroy_node()
 
 
     def create_node(self, node_class, **kwargs) -> Node:

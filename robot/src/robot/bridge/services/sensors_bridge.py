@@ -6,7 +6,7 @@ from fastapi.websockets import WebSocketState
 from config.constants import Constants
 
 
-class Sensors(Node):
+class SensorsBridge(Node):
     def __init__(self, websocket: WebSocket, node_name: str, topic_name: str):
         super().__init__(node_name)
         self.websocket = websocket

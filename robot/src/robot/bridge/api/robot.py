@@ -2,9 +2,10 @@ from fastapi import APIRouter, WebSocket, Depends, WebSocketDisconnect
 from fastapi.security import HTTPAuthorizationCredentials
 from bridge.services.auth import AuthService
 from bridge.services.node_manager import NodeManager
-from bridge.services.camera import Camera
+from bridge.services.camera_bridge import CameraBridge
+from bridge.services.head_bridge import HeadBridge
 from bridge.configs.auth_config import bearer_scheme
-from bridge.services.sensors import Sensors
+from bridge.services.sensors_bridge import SensorsBridge
 from fastapi.responses import HTMLResponse
 from config.constants import Constants
 
@@ -321,6 +322,41 @@ html_camera = """
 """
 
 
+html_head_control = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <h1>WebSocket Chat</h1>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <ul id='messages'>
+        </ul>
+        <script>
+            var ws = new WebSocket("ws://localhost:8383/robot/ws/head-control");
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+    </body>
+</html>
+"""
+
+
 @router.get("/ir_sensors")
 async def ir_sensors():
     return HTMLResponse(html_ir)
@@ -340,13 +376,17 @@ async def ultrasonic_camera():
 async def ultrasonic_camera():
     return HTMLResponse(html_camera_simple)
 
+@router.get("/head-control")
+async def ultrasonic_camera():
+    return HTMLResponse(html_head_control)
+
 
 @router.websocket("/ws/ir-sensors")
 async def ir_sensors_endpoint(websocket: WebSocket):
                             #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    node_manager.create_node(Sensors,
+    node_manager.create_node(SensorsBridge,
                              websocket=websocket,
                              node_name=Constants.IR_SENSOR_BRIDGE_NODE,
                              topic_name=Constants.IR_JOINED_INFO_TOPIC)
@@ -358,7 +398,7 @@ async def ultrasonic_sensor_endpoint(websocket: WebSocket):
                             #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    node_manager.create_node(Sensors,
+    node_manager.create_node(SensorsBridge,
                              websocket=websocket,
                              node_name=Constants.ULTRASONIC_SENSOR_BRIDGE_NODE,
                              topic_name=Constants.ULTRASONIC_INFO_TOPIC)   
@@ -370,8 +410,20 @@ async def camera_endpoint(websocket: WebSocket):
                             #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    node_manager.create_node(Camera,
+    node_manager.create_node(CameraBridge,
                              websocket=websocket,
                              node_name=Constants.CAMERA_BRIDGE_NODE,
                              topic_name=Constants.CAMERA_TOPIC)  
     await node_manager.spin_nodes() 
+
+
+@router.websocket("/ws/head-control")
+async def camera_endpoint(websocket: WebSocket):
+                            #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+    # AuthService.check_token(credentials)
+    await websocket.accept()
+    await node_manager.spin_node_once(HeadBridge, 
+                                      rotation_angle_percent=0.8)
+
+
+

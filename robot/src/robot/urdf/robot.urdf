@@ -1510,7 +1510,7 @@
   </joint>  
 
   <!-- настройка вращения головы робота -->
-  <ros2_control name="head__rotation_control" type="system">
+  <ros2_control name="head_rotation_control" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
@@ -1523,7 +1523,7 @@
   </ros2_control>
 
   <!-- настройка шасси робота -->
-  <ros2_control name="chassis_control" type="system">
+  <ros2_control name="chassis_controller" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
@@ -1553,7 +1553,6 @@
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
       <parameters>/home/stepa/ros2_ws/diplom-robot/robot/src/robot/config/config.yaml</parameters>
-      <robot_namespace>/robot</robot_namespace>
     </plugin>
   </gazebo>
   

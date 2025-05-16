@@ -1,4 +1,4 @@
-robot/controller_manager:
+controller_manager:
   ros__parameters:
     update_rate: 100
     use_sim_time: true
@@ -13,7 +13,7 @@ robot/controller_manager:
       type: diff_drive_controller/DiffDriveController
     
 
-robot/head_rotation_controller:
+head_rotation_controller:
   ros__parameters:
     joints:
       - head_joint
@@ -36,7 +36,7 @@ robot/head_rotation_controller:
         goal: 0.03  
 
 
-robot/chassis_controller:
+chassis_controller:
   ros__parameters:
     left_wheel_names: 
       - wheel_front_left_joint

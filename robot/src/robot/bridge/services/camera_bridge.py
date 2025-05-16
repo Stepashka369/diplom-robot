@@ -9,7 +9,7 @@ from cv_bridge import CvBridge
 from config.constants import Constants
 
 
-class Camera(Node):
+class CameraBridge(Node):
     def __init__(self, websocket: WebSocket, node_name: str, topic_name: str):
         super().__init__(node_name)
         self.bridge = CvBridge()

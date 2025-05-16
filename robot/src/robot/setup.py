@@ -42,6 +42,8 @@ setup(
         'console_scripts': [
             'ir_sensor_broker = robot.ir_sensor_broker:main',
             'ultrasonic_sensor_broker = robot.ultrasonic_sensor_broker:main',
+            'head_bridge = bridge.services.head_bridge:main',
+            'chassis_broker = robot.chassis_broker:main',
             '_bridge = bridge.main:main',
         ],
     },
