@@ -1,6 +1,7 @@
 class Constants:
     PKG_NAME = 'robot'
     CHECK_CONNECTION_TIME = 0.5
+    CHECK_COMMANDS_TIME = 0.5
     IR_SENSOR_BROKER = "ir_sensor_broker"
     IR_BACK_CENTER_TOPIC = "/ir_back_center_controller/out"
     IR_FRONT_CENTER_TOPIC = "/ir_front_center_controller/out"

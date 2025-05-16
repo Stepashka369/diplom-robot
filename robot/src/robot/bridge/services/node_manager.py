@@ -76,6 +76,8 @@ class NodeManager:
         
         node = node_class(**kwargs)
         self.nodes[node_name] = node
+        
+        return node
     
 
     def shutdown(self):

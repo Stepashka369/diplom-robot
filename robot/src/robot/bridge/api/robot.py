@@ -1,15 +1,17 @@
+import rclpy
+import asyncio
 from fastapi import APIRouter, WebSocket, Depends, WebSocketDisconnect
 from fastapi.security import HTTPAuthorizationCredentials
 from bridge.services.auth import AuthService
 from bridge.services.node_manager import NodeManager
 from bridge.services.camera_bridge import CameraBridge
 from bridge.services.head_bridge import HeadBridge
+from bridge.services.cmd import Command
 from bridge.configs.auth_config import bearer_scheme
 from bridge.services.sensors_bridge import SensorsBridge
 from fastapi.responses import HTMLResponse
 from config.constants import Constants
-
-
+from bridge.models.schemas import HeadRotation
 
 
 router = APIRouter(prefix="/robot", tags=["Robot"])
@@ -324,35 +326,161 @@ html_camera = """
 
 html_head_control = """
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var ws = new WebSocket("ws://localhost:8383/robot/ws/head-control");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Head Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .control-panel {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .slider-container {
+            margin: 30px 0;
+        }
+        .slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #f44336, #ddd, #4CAF50);
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #2196F3;
+            cursor: pointer;
+        }
+        .value-display {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .connected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .disconnected {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h1>Robot Head Control</h1>
+        <div class="slider-container">
+            <input type="range" min="-100" max="100" value="0" class="slider" id="headSlider">
+            <div class="value-display">Position: <span id="sliderValue">0.00</span></div>
+        </div>
+        <div id="connectionStatus" class="status disconnected">Disconnected</div>
+    </div>
+
+    <script>
+        const slider = document.getElementById("headSlider");
+        const sliderValue = document.getElementById("sliderValue");
+        const statusDiv = document.getElementById("connectionStatus");
+        
+        const WS_URL = "ws://localhost:8383/robot/ws/head-control";
+        let socket;
+        let lastSentValue = 0;
+        let debounceTimer;
+
+        // Подключение к WebSocket
+        function connectWebSocket() {
+            socket = new WebSocket(WS_URL);
+            
+            socket.onopen = function() {
+                statusDiv.textContent = "Connected to " + WS_URL;
+                statusDiv.className = "status connected";
+                console.log("WebSocket connection established");
             };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
+            
+            socket.onclose = function() {
+                statusDiv.textContent = "Disconnected";
+                statusDiv.className = "status disconnected";
+                console.log("WebSocket connection closed");
+                // Попытка переподключения через 3 секунды
+                setTimeout(connectWebSocket, 3000);
+            };
+            
+            socket.onerror = function(error) {
+                console.error("WebSocket error:", error);
+                statusDiv.textContent = "Connection error";
+                statusDiv.className = "status disconnected";
+            };
+            
+            socket.onmessage = function(event) {
+                console.log("Received message:", event.data);
+            };
+        }
+
+        // Преобразование значения слайдера (-100..100) в (-1..1)
+        function normalizeValue(sliderValue) {
+            return (sliderValue / 100).toFixed(2);
+        }
+
+        // Отправка команды на сервер
+        function sendCommand(normalizedValue) {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                console.warn("WebSocket is not connected");
+                return;
             }
-        </script>
-    </body>
+            
+            const command = {
+                rotation_percent: parseFloat(normalizedValue)
+            };
+            
+            socket.send(JSON.stringify(command));
+            console.log("Sent command:", command);
+        }
+
+        // Обработчик изменения слайдера
+        slider.addEventListener("input", function() {
+            const rawValue = parseInt(this.value);
+            const normalizedValue = normalizeValue(rawValue);
+            sliderValue.textContent = normalizedValue;
+            
+            // Дебаунс, чтобы не отправлять слишком много сообщений
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                if (rawValue !== lastSentValue) {
+                    sendCommand(normalizedValue);
+                    lastSentValue = rawValue;
+                }
+            }, 50);
+        });
+
+        // Инициализация при загрузке
+        window.addEventListener("load", function() {
+            slider.value = 0;
+            sliderValue.textContent = "0.00";
+            connectWebSocket();
+        });
+    </script>
+</body>
 </html>
 """
 
@@ -422,8 +550,7 @@ async def camera_endpoint(websocket: WebSocket):
                             #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    await node_manager.spin_node_once(HeadBridge, 
-                                      rotation_angle_percent=0.8)
-
+    await Command.process_head(websocket=websocket, 
+                               node_manager=node_manager)
 
 
