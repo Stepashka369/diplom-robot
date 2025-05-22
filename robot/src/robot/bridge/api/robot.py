@@ -12,6 +12,8 @@ from bridge.services.sensors_bridge import SensorsBridge
 from fastapi.responses import HTMLResponse
 from config.constants import Constants
 from bridge.models.schemas import HeadRotation
+import json
+from pydantic import ValidationError
 
 
 router = APIRouter(prefix="/robot", tags=["Robot"])
@@ -349,29 +351,40 @@ html_head_control = """
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 300px;
         }
-        .slider-container {
-            margin: 30px 0;
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
         }
-        .slider {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 10px;
+        .control-button {
+            padding: 15px;
+            border: none;
             border-radius: 5px;
-            background: linear-gradient(to right, #f44336, #ddd, #4CAF50);
-            outline: none;
-        }
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #2196F3;
+            background-color: #2196F3;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .value-display {
-            margin-top: 10px;
-            font-size: 18px;
+        .control-button:hover {
+            background-color: #0b7dda;
+        }
+        .control-button.full-left {
+            background-color: #f44336;
+        }
+        .control-button.half-left {
+            background-color: #ff9800;
+        }
+        .control-button.center {
+            grid-column: span 2;
+            background-color: #4CAF50;
+        }
+        .control-button.half-right {
+            background-color: #ff9800;
+        }
+        .control-button.full-right {
+            background-color: #f44336;
         }
         .status {
             margin-top: 20px;
@@ -386,27 +399,37 @@ html_head_control = """
             background-color: #f44336;
             color: white;
         }
+        .current-position {
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="control-panel">
         <h1>Robot Head Control</h1>
-        <div class="slider-container">
-            <input type="range" min="-100" max="100" value="0" class="slider" id="headSlider">
-            <div class="value-display">Position: <span id="sliderValue">0.00</span></div>
+        <div class="current-position">Current Position: <span id="currentPosition">0.00</span></div>
+        
+        <div class="button-container">
+            <button class="control-button full-left" data-value="-1">Full Left (-1)</button>
+            <button class="control-button half-left" data-value="-0.5">Half Left (-0.5)</button>
+            <button class="control-button center" data-value="0">Center (0)</button>
+            <button class="control-button half-right" data-value="0.5">Half Right (0.5)</button>
+            <button class="control-button full-right" data-value="1">Full Right (1)</button>
         </div>
+        
         <div id="connectionStatus" class="status disconnected">Disconnected</div>
     </div>
 
     <script>
-        const slider = document.getElementById("headSlider");
-        const sliderValue = document.getElementById("sliderValue");
+        const currentPosition = document.getElementById("currentPosition");
         const statusDiv = document.getElementById("connectionStatus");
+        const buttons = document.querySelectorAll(".control-button");
         
         const WS_URL = "ws://localhost:8383/robot/ws/head-control";
         let socket;
         let lastSentValue = 0;
-        let debounceTimer;
 
         // Подключение к WebSocket
         function connectWebSocket() {
@@ -434,49 +457,48 @@ html_head_control = """
             
             socket.onmessage = function(event) {
                 console.log("Received message:", event.data);
+                // Можно обновлять текущую позицию на основе ответа сервера
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.current_position !== undefined) {
+                        currentPosition.textContent = data.current_position.toFixed(2);
+                    }
+                } catch (e) {
+                    console.error("Error parsing message:", e);
+                }
             };
         }
 
-        // Преобразование значения слайдера (-100..100) в (-1..1)
-        function normalizeValue(sliderValue) {
-            return (sliderValue / 100).toFixed(2);
-        }
-
         // Отправка команды на сервер
-        function sendCommand(normalizedValue) {
+        function sendCommand(value) {
             if (!socket || socket.readyState !== WebSocket.OPEN) {
                 console.warn("WebSocket is not connected");
                 return;
             }
             
             const command = {
-                rotation_percent: parseFloat(normalizedValue)
+                rotation_percent: parseFloat(value)
             };
             
             socket.send(JSON.stringify(command));
             console.log("Sent command:", command);
+            currentPosition.textContent = value;
+            lastSentValue = value;
         }
 
-        // Обработчик изменения слайдера
-        slider.addEventListener("input", function() {
-            const rawValue = parseInt(this.value);
-            const normalizedValue = normalizeValue(rawValue);
-            sliderValue.textContent = normalizedValue;
-            
-            // Дебаунс, чтобы не отправлять слишком много сообщений
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                if (rawValue !== lastSentValue) {
-                    sendCommand(normalizedValue);
-                    lastSentValue = rawValue;
+        // Обработчики для кнопок
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                const value = this.getAttribute("data-value");
+                if (parseFloat(value) !== lastSentValue) {
+                    sendCommand(value);
                 }
-            }, 50);
+            });
         });
 
         // Инициализация при загрузке
         window.addEventListener("load", function() {
-            slider.value = 0;
-            sliderValue.textContent = "0.00";
+            currentPosition.textContent = "0.00";
             connectWebSocket();
         });
     </script>
@@ -546,11 +568,41 @@ async def camera_endpoint(websocket: WebSocket):
 
 
 @router.websocket("/ws/head-control")
-async def camera_endpoint(websocket: WebSocket):
-                            #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+async def head_control_endpoint(websocket: WebSocket):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    await Command.process_head(websocket=websocket, 
-                               node_manager=node_manager)
+    
+    try:
+        node_manager.create_node(HeadBridge,
+                             websocket=websocket,
+                             node_name=Constants.HEAD_BRIDGE_NODE,
+                             topic_name=Constants.HEAD_TOPIC)
+        
+        while True:
+            try:
+                data = await websocket.receive_text()
+                try:
+                    json_data = json.loads(data)
+                    command = HeadRotation(**json_data)
+                    # Get the node instance and send the command
+                    head_node = node_manager.get_node(Constants.HEAD_BRIDGE_NODE)
+                    if head_node:
+                        head_node.move_to_position(command)
+                    else:
+                        await websocket.send_text(json.dumps({"error": "Head control node not available"}))
+                except ValidationError as e:
+                    await websocket.send_text(json.dumps({"error": "Validation error", "details": str(e)}))
+                except json.JSONDecodeError:
+                    await websocket.send_text(json.dumps({"error": "Invalid JSON"}))
+            except WebSocketDisconnect:
+                break
+            except Exception as e:
+                await websocket.send_text(json.dumps({"error": f"Unexpected error: {str(e)}"}))
+                break
+    finally:
+        node_manager.destroy_node(Constants.HEAD_BRIDGE_NODE)
+
+    # await Command.process_head(websocket=websocket, 
+    #                            node_manager=node_manager)
 
 
