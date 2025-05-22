@@ -569,40 +569,13 @@ async def camera_endpoint(websocket: WebSocket):
 
 @router.websocket("/ws/head-control")
 async def head_control_endpoint(websocket: WebSocket):
+                            #   credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     # AuthService.check_token(credentials)
     await websocket.accept()
-    
-    try:
-        node_manager.create_node(HeadBridge,
-                             websocket=websocket,
-                             node_name=Constants.HEAD_BRIDGE_NODE,
-                             topic_name=Constants.HEAD_TOPIC)
-        
-        while True:
-            try:
-                data = await websocket.receive_text()
-                try:
-                    json_data = json.loads(data)
-                    command = HeadRotation(**json_data)
-                    # Get the node instance and send the command
-                    head_node = node_manager.get_node(Constants.HEAD_BRIDGE_NODE)
-                    if head_node:
-                        head_node.move_to_position(command)
-                    else:
-                        await websocket.send_text(json.dumps({"error": "Head control node not available"}))
-                except ValidationError as e:
-                    await websocket.send_text(json.dumps({"error": "Validation error", "details": str(e)}))
-                except json.JSONDecodeError:
-                    await websocket.send_text(json.dumps({"error": "Invalid JSON"}))
-            except WebSocketDisconnect:
-                break
-            except Exception as e:
-                await websocket.send_text(json.dumps({"error": f"Unexpected error: {str(e)}"}))
-                break
-    finally:
-        node_manager.destroy_node(Constants.HEAD_BRIDGE_NODE)
+    await Command.process_head(websocket=websocket,
+                         node_manager=node_manager)
 
-    # await Command.process_head(websocket=websocket, 
-    #                            node_manager=node_manager)
+  
+
 
 
