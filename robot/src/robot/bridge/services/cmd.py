@@ -1,25 +1,22 @@
 import json
 from fastapi import WebSocket, WebSocketDisconnect
-from bridge.models.schemas import HeadRotation
+from bridge.models.schemas import HeadRotation, ChassisMovement
 from bridge.services.head_bridge import HeadBridge
+from bridge.services.chassis_bridge import ChassisBridge
 from pydantic import ValidationError
-from bridge.services.node_manager import NodeManager
-from config.constants import Constants
+import asyncio
 
 class Command():
-
     @staticmethod
-    async def process_head(websocket: WebSocket, node_manager: NodeManager):
+    async def process_head(websocket: WebSocket, node: HeadBridge):
         try:
             while True:
                 data = await websocket.receive_text()
                 try:
                     json_data = json.loads(data)
                     command = HeadRotation(**json_data)
-                    await node_manager.spin_node_once(HeadBridge, 
-                                                        node_name=Constants.HEAD_BRIDGE_NODE,
-                                                        topic_name=Constants.HEAD_TOPIC,
-                                                        rotation_percent=command)
+                    node.move_to_position(command)
+                    await asyncio.sleep(0.3)
                 except ValidationError as e:
                     await websocket.send_text(json.dumps({"error": "Validation error", "details": str(e)}))
                 except json.JSONDecodeError:
@@ -28,6 +25,20 @@ class Command():
             print("Client disconnected")
 
 
+
     @staticmethod
-    def process_chassis():
-        pass
+    async def process_chassis(websocket: WebSocket, node: ChassisBridge):
+        try:
+            while True:
+                data = await websocket.receive_text()
+                try:
+                    json_data = json.loads(data)
+                    command = ChassisMovement(**json_data)
+                    node.move(command)
+                    await asyncio.sleep(0.3)
+                except ValidationError as e:
+                    await websocket.send_text(json.dumps({"error": "Validation error", "details": str(e)}))
+                except json.JSONDecodeError:
+                    await websocket.send_text(json.dumps({"error": "Invalid JSON"}))     
+        except WebSocketDisconnect:
+            print("Client disconnected")

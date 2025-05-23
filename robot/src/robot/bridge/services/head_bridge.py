@@ -5,16 +5,13 @@ from config.constants import Constants
 from bridge.models.schemas import HeadRotation
 
 
-last_pos_rad = 0.0
-
-
 class HeadBridge(Node):
-    def __init__(self, node_name: str, topic_name: str, rotation_percent: HeadRotation):
+    def __init__(self, node_name: str, topic_name: str):
         super().__init__(node_name=node_name)
         self.publisher = self.create_publisher(JointTrajectory, topic_name, 10)
         self.joint_name = Constants.HEAD_JOINT_NAME
+        self.last_pos_rad = 0.0
         self.get_logger().info("Head bridge node started")
-        self.move_to_position(rotation_percent)
 
 
     def move_to_position(self, rotation_angle_percent: HeadRotation):
@@ -26,10 +23,9 @@ class HeadBridge(Node):
         
 
     def calculate_rad(self, rotation_angle_percent: float) -> tuple[float, float]:
-        global last_pos_rad
         new_pos_rad = Constants.HEAD_MAX_MIN_ROTATION_ANGLE * rotation_angle_percent
-        distance = abs(new_pos_rad - last_pos_rad)
-        last_pos_rad = new_pos_rad
+        distance = abs(new_pos_rad - self.last_pos_rad)
+        self.last_pos_rad = new_pos_rad
         return new_pos_rad, distance
 
 
@@ -37,7 +33,7 @@ class HeadBridge(Node):
         msg = JointTrajectory(joint_names=[self.joint_name])
         point = JointTrajectoryPoint(
             positions=[target_position], 
-            time_from_start=Duration(sec=int(sec), nanosec=int(nanosec))
+            time_from_start=Duration(sec=int(1), nanosec=int(0))
         )
         msg.points.append(point)
         return msg

@@ -19,5 +19,6 @@ class Constants:
     HEAD_TOPIC = "/head_rotation_controller/joint_trajectory"
     HEAD_VELOCITY = 3.0
     HEAD_MAX_MIN_ROTATION_ANGLE = 1.57
-    HEAD_MULTIPLIER = 10**9
     HEAD_JOINT_NAME = "head_joint"
+    CHASSIS_BRIDGE_NODE = "chassis_bridge_node"
+    CHASSIS_TOPIC = "/chassis_controller/cmd_vel"
