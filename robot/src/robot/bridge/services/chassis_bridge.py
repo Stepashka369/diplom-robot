@@ -1,6 +1,7 @@
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from bridge.models.schemas import ChassisMovement
+from config.constants import Constants
 
 class ChassisBridge(Node):
     def __init__(self, node_name: str, topic_name: str):
@@ -13,13 +14,13 @@ class ChassisBridge(Node):
 
 
     def publish_cmd_msg(self):
-        self.get_logger().info(f"Left_wheels: {self.current_cmd_msg.left_wheels_speed}, right_wheels: {self.current_cmd_msg.right_wheels_speed}")
+        self.get_logger().info(f"""Left_wheels_speed: {self.current_cmd_msg.left_wheels_speed}, 
+                               right_wheels_spessd: {self.current_cmd_msg.right_wheels_speed}""")
         cmd_vel_msg = self.create_cmd_msg()
         self.publisher.publish(cmd_vel_msg)
 
 
-    def move(self, movement_cmd: ChassisMovement):      
-        self.get_logger().info("MOVE!!!")      
+    def move(self, movement_cmd: ChassisMovement):        
         self.current_cmd_msg = movement_cmd
         
 
@@ -27,24 +28,21 @@ class ChassisBridge(Node):
         linear_x = 0.0
         angular_z = 0.0
         if self.current_cmd_msg.left_wheels_speed > self.current_cmd_msg.right_wheels_speed:
-            linear_x = 5.0
+            linear_x = -1.0
             angular_z = 0.0
         elif self.current_cmd_msg.right_wheels_speed > self.current_cmd_msg.left_wheels_speed:
-            linear_x = -5.0
+            linear_x = 1.0
             angular_z = 0.0
         elif self.current_cmd_msg.left_wheels_speed == self.current_cmd_msg.right_wheels_speed and self.current_cmd_msg.right_wheels_speed > 0.0:
-            angular_z = 5.0
+            angular_z = 6.0
             linear_x = 0.0
         elif self.current_cmd_msg.left_wheels_speed == self.current_cmd_msg.right_wheels_speed and self.current_cmd_msg.right_wheels_speed < 0.0:
-            angular_z = -5.0
+            angular_z = -6.0
             linear_x = 0.0
 
         msg = TwistStamped()
-        # Заполняем заголовок
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = "base_button_link"  # Должно совпадать с base_frame_id из конфигурации
-        
-        # Заполняем данные о скорости
+        msg.header.frame_id = Constants.BASE_BUTTON_LINK 
         msg.twist.linear.x = linear_x
         msg.twist.angular.z = angular_z
         return msg

@@ -796,8 +796,11 @@ async def head_control_endpoint(websocket: WebSocket):
     node = node_manager.create_node(ChassisBridge, 
                         node_name=Constants.CHASSIS_BRIDGE_NODE,
                         topic_name=Constants.CHASSIS_TOPIC)
-    await Command.process_chassis(websocket=websocket,
-                                node=node)
+    asyncio.gather(
+        node_manager.spin_nodes(),
+        await Command.process_chassis(websocket=websocket,node=node)
+    )
+    
 
   
 

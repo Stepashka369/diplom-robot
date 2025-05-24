@@ -25,7 +25,6 @@ class Command():
             print("Client disconnected")
 
 
-
     @staticmethod
     async def process_chassis(websocket: WebSocket, node: ChassisBridge):
         try:

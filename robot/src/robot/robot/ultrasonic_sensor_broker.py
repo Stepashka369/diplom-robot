@@ -20,7 +20,7 @@ class UltrasonicSensorBroker(Node):
       
 
     def process_data(self, msg):
-        return SensorInfo(min_range=msg.min_range, 
+        self.sensor_info = SensorInfo(min_range=msg.min_range, 
                           max_range=msg.max_range, 
                           range=msg.range)    
 

@@ -22,3 +22,4 @@ class Constants:
     HEAD_JOINT_NAME = "head_joint"
     CHASSIS_BRIDGE_NODE = "chassis_bridge_node"
     CHASSIS_TOPIC = "/chassis_controller/cmd_vel"
+    BASE_BUTTON_LINK = "base_button_link"
