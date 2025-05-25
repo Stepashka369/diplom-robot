@@ -3,6 +3,7 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 from config.constants import Constants
 from bridge.models.schemas import HeadRotation
+import time
 
 
 class HeadBridge(Node):
@@ -11,10 +12,18 @@ class HeadBridge(Node):
         self.publisher = self.create_publisher(JointTrajectory, topic_name, 10)
         self.joint_name = Constants.HEAD_JOINT_NAME
         self.last_pos_rad = 0.0
+        # 
+        self.last_last_pos_rad = 0.0
+        self.last_rotation_start_time = 0.0
+        self.last_rotation_planned_time = 0.0
+        # 
         self.get_logger().info("Head bridge node started")
 
+        
 
     def move_to_position(self, rotation_angle_percent: HeadRotation):
+        self.check_last_rotation()
+        self.last_last_pos_rad = self.last_pos_rad
         position_rad, distance = self.calculate_rad(rotation_angle_percent.rotation_percent)
         self.get_logger().info(f"Moving head to angle: {position_rad} radians")
         time_integer, time_fractional = self.calculate_time(distance)
@@ -41,7 +50,21 @@ class HeadBridge(Node):
 
     def calculate_time(self, distance: float) -> tuple[int, int]:
         total_seconds = abs(distance) / Constants.HEAD_VELOCITY
+        self.last_rotation_planned_time = total_seconds
         sec = int(total_seconds)
         fractional = total_seconds - sec
         nsec = int(fractional * 1e9)
         return (sec, nsec)
+
+
+    def check_last_rotation(self):
+        current_time = time.time()
+        last_rotation_end_time = self.last_rotation_start_time + self.last_rotation_planned_time
+        if last_rotation_end_time > current_time:
+            actual_rotation_time = current_time - self.last_rotation_start_time
+            passed_distance = Constants.HEAD_VELOCITY * actual_rotation_time
+            if self.last_last_pos_rad < self.last_pos_rad:
+                self.last_pos_rad = self.last_last_pos_rad + passed_distance
+            else:
+                self.last_last_pos_rad = self.last_last_pos_rad - passed_distance
+            
